@@ -1,0 +1,18 @@
+# System files
+.DS_Store
+
+# Compiled binaries
+*.exe
+*.out
+para_image
+para_image_parra
+*.o
+
+# Generated files
+arcl.txt
+output_log.txt
+
+# Images
+# Ignoramos todos los archivos .bmp para evitar subir archivos pesados.
+# Si deseas subir alguna imagen específica, puedes usar 'git add -f nombre.bmp'
+img/*.bmp

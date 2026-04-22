@@ -90,7 +90,9 @@ class AboutDialog(QDialog):
         layout.addWidget(info_label)
         
         logo_label = QLabel()
-        logo_pixmap = QPixmap("./img/tec_logo.png")
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        logo_path = os.path.join(base_dir, "img", "tec_logo.png")
+        logo_pixmap = QPixmap(logo_path)
         if not logo_pixmap.isNull():
             logo_pixmap = logo_pixmap.scaled(100, 100, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
             logo_label.setPixmap(logo_pixmap)
@@ -230,7 +232,9 @@ class MainWindow(QMainWindow):
         logo_layout = QHBoxLayout()
         logo_layout.addStretch()
         self.logo_label = QLabel()
-        logo_pixmap = QPixmap("./img/tec_logo.png")
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        logo_path = os.path.join(base_dir, "img", "tec_logo.png")
+        logo_pixmap = QPixmap(logo_path)
         if not logo_pixmap.isNull():
             logo_pixmap = logo_pixmap.scaled(80, 80, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
             self.logo_label.setPixmap(logo_pixmap)
@@ -268,8 +272,10 @@ class MainWindow(QMainWindow):
             return
             
         # Make sure output directory exists
-        if not os.path.exists("./img"):
-            os.makedirs("./img")
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        img_dir = os.path.join(base_dir, "img")
+        if not os.path.exists(img_dir):
+            os.makedirs(img_dir)
 
         start_time = time.time()
         
@@ -309,7 +315,7 @@ class MainWindow(QMainWindow):
         elapsed = end_time - start_time
         
         self.tiempo_entry.setText(f"{elapsed:.4f} segundos")
-        self.ruta_entry.setText(os.path.abspath("./img/"))
+        self.ruta_entry.setText(img_dir)
         
         # Clear paths
         self.drop_area.image_paths.clear()

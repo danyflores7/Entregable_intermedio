@@ -36,7 +36,15 @@ extern void inv_img(char mask[10], char path[80]) {
     
     unsigned char header[54];
     fread(header, sizeof(unsigned char), 54, image);
+    int offset = *(int*)&header[10];
+    int remaining_header = offset - 54;
     fwrite(header, sizeof(unsigned char), 54, outputImage);
+    if (remaining_header > 0) {
+        unsigned char* extra_hdr = (unsigned char*)malloc(remaining_header);
+        fread(extra_hdr, 1, remaining_header, image);
+        fwrite(extra_hdr, 1, remaining_header, outputImage);
+        free(extra_hdr);
+    }
     
     int width = *(int*)&header[18];
     int height = *(int*)&header[22];
@@ -87,7 +95,15 @@ extern void inv_img_color(char mask[10], char path[80]) {
     
     unsigned char header[54];
     fread(header, sizeof(unsigned char), 54, image);
+    int offset = *(int*)&header[10];
+    int remaining_header = offset - 54;
     fwrite(header, sizeof(unsigned char), 54, outputImage);
+    if (remaining_header > 0) {
+        unsigned char* extra_hdr = (unsigned char*)malloc(remaining_header);
+        fread(extra_hdr, 1, remaining_header, image);
+        fwrite(extra_hdr, 1, remaining_header, outputImage);
+        free(extra_hdr);
+    }
     
     int width = *(int*)&header[18];
     int height = *(int*)&header[22];
@@ -123,7 +139,15 @@ extern void inv_img_grey_horizontal(char mask[10], char path[80]) {
     
     unsigned char header[54];
     fread(header, sizeof(unsigned char), 54, image);
+    int offset = *(int*)&header[10];
+    int remaining_header = offset - 54;
     fwrite(header, sizeof(unsigned char), 54, outputImage);
+    if (remaining_header > 0) {
+        unsigned char* extra_hdr = (unsigned char*)malloc(remaining_header);
+        fread(extra_hdr, 1, remaining_header, image);
+        fwrite(extra_hdr, 1, remaining_header, outputImage);
+        free(extra_hdr);
+    }
     
     int width = *(int*)&header[18];
     int height = *(int*)&header[22];
@@ -176,7 +200,15 @@ extern void inv_img_color_horizontal(char mask[10], char path[80]) {
     
     unsigned char header[54];
     fread(header, sizeof(unsigned char), 54, image);
+    int offset = *(int*)&header[10];
+    int remaining_header = offset - 54;
     fwrite(header, sizeof(unsigned char), 54, outputImage);
+    if (remaining_header > 0) {
+        unsigned char* extra_hdr = (unsigned char*)malloc(remaining_header);
+        fread(extra_hdr, 1, remaining_header, image);
+        fwrite(extra_hdr, 1, remaining_header, outputImage);
+        free(extra_hdr);
+    }
     
     int width = *(int*)&header[18];
     int height = *(int*)&header[22];
@@ -223,7 +255,15 @@ extern void desenfoque(const char* input_path, const char* name_output, int kern
     
     unsigned char header[54];
     fread(header, sizeof(unsigned char), 54, image);
+    int offset = *(int*)&header[10];
+    int remaining_header = offset - 54;
     fwrite(header, sizeof(unsigned char), 54, outputImage);
+    if (remaining_header > 0) {
+        unsigned char* extra_hdr = (unsigned char*)malloc(remaining_header);
+        fread(extra_hdr, 1, remaining_header, image);
+        fwrite(extra_hdr, 1, remaining_header, outputImage);
+        free(extra_hdr);
+    }
     
     int width = *(int*)&header[18];
     int height = *(int*)&header[22];
@@ -325,7 +365,15 @@ extern void desenfoque_grey(const char* input_path, const char* name_output, int
     
     unsigned char header[54];
     fread(header, sizeof(unsigned char), 54, image);
+    int offset = *(int*)&header[10];
+    int remaining_header = offset - 54;
     fwrite(header, sizeof(unsigned char), 54, outputImage);
+    if (remaining_header > 0) {
+        unsigned char* extra_hdr = (unsigned char*)malloc(remaining_header);
+        fread(extra_hdr, 1, remaining_header, image);
+        fwrite(extra_hdr, 1, remaining_header, outputImage);
+        free(extra_hdr);
+    }
     
     int width = *(int*)&header[18];
     int height = *(int*)&header[22];

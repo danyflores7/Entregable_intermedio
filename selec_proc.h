@@ -48,7 +48,9 @@ extern void inv_img(char mask[10], char path[80]) {
     
     int width = *(int*)&header[18];
     int height = *(int*)&header[22];
-    int row_padded = (width * 3 + 3) & (~3);
+    short bpp = *(short*)&header[28];
+    int bytes_per_pixel = bpp / 8;
+    int row_padded = (width * bytes_per_pixel + 3) & (~3);
     
     unsigned char** rows = (unsigned char**)malloc(height * sizeof(unsigned char*));
     for (int i = 0; i < height; i++) {
@@ -62,7 +64,7 @@ extern void inv_img(char mask[10], char path[80]) {
         for(int p = 0; p < row_padded; p++) out_row[p] = rows[y][p]; // copiar padding
         
         for (int x = 0; x < width; x++) {
-            int idx = x * 3;
+            int idx = x * bytes_per_pixel;
             unsigned char b = rows[y][idx];
             unsigned char g = rows[y][idx+1];
             unsigned char r = rows[y][idx+2];
@@ -70,6 +72,7 @@ extern void inv_img(char mask[10], char path[80]) {
             out_row[idx] = pixel;
             out_row[idx+1] = pixel;
             out_row[idx+2] = pixel;
+            if (bytes_per_pixel == 4) out_row[idx+3] = rows[y][idx+3];
         }
         fwrite(out_row, sizeof(unsigned char), row_padded, outputImage);
         free(out_row);
@@ -107,7 +110,9 @@ extern void inv_img_color(char mask[10], char path[80]) {
     
     int width = *(int*)&header[18];
     int height = *(int*)&header[22];
-    int row_padded = (width * 3 + 3) & (~3);
+    short bpp = *(short*)&header[28];
+    int bytes_per_pixel = bpp / 8;
+    int row_padded = (width * bytes_per_pixel + 3) & (~3);
     
     unsigned char** rows = (unsigned char**)malloc(height * sizeof(unsigned char*));
     for (int i = 0; i < height; i++) {
@@ -151,7 +156,9 @@ extern void inv_img_grey_horizontal(char mask[10], char path[80]) {
     
     int width = *(int*)&header[18];
     int height = *(int*)&header[22];
-    int row_padded = (width * 3 + 3) & (~3);
+    short bpp = *(short*)&header[28];
+    int bytes_per_pixel = bpp / 8;
+    int row_padded = (width * bytes_per_pixel + 3) & (~3);
     
     unsigned char** rows = (unsigned char**)malloc(height * sizeof(unsigned char*));
     for (int i = 0; i < height; i++) {
@@ -164,8 +171,8 @@ extern void inv_img_grey_horizontal(char mask[10], char path[80]) {
         for(int p = 0; p < row_padded; p++) out_row[p] = rows[y][p]; // padding
         
         for (int x = 0; x < width; x++) {
-            int orig_idx = x * 3;
-            int new_idx = (width - 1 - x) * 3;
+            int orig_idx = x * bytes_per_pixel;
+            int new_idx = (width - 1 - x) * bytes_per_pixel;
             
             unsigned char b = rows[y][orig_idx];
             unsigned char g = rows[y][orig_idx+1];
@@ -175,6 +182,7 @@ extern void inv_img_grey_horizontal(char mask[10], char path[80]) {
             out_row[new_idx] = pixel;
             out_row[new_idx+1] = pixel;
             out_row[new_idx+2] = pixel;
+            if (bytes_per_pixel == 4) out_row[new_idx+3] = rows[y][orig_idx+3];
         }
         fwrite(out_row, sizeof(unsigned char), row_padded, outputImage);
         free(out_row);
@@ -212,7 +220,9 @@ extern void inv_img_color_horizontal(char mask[10], char path[80]) {
     
     int width = *(int*)&header[18];
     int height = *(int*)&header[22];
-    int row_padded = (width * 3 + 3) & (~3);
+    short bpp = *(short*)&header[28];
+    int bytes_per_pixel = bpp / 8;
+    int row_padded = (width * bytes_per_pixel + 3) & (~3);
     
     unsigned char** rows = (unsigned char**)malloc(height * sizeof(unsigned char*));
     for (int i = 0; i < height; i++) {
@@ -225,11 +235,12 @@ extern void inv_img_color_horizontal(char mask[10], char path[80]) {
         for(int p = 0; p < row_padded; p++) out_row[p] = rows[y][p]; // padding
         
         for (int x = 0; x < width; x++) {
-            int orig_idx = x * 3;
-            int new_idx = (width - 1 - x) * 3;
+            int orig_idx = x * bytes_per_pixel;
+            int new_idx = (width - 1 - x) * bytes_per_pixel;
             out_row[new_idx] = rows[y][orig_idx];
             out_row[new_idx+1] = rows[y][orig_idx+1];
             out_row[new_idx+2] = rows[y][orig_idx+2];
+            if (bytes_per_pixel == 4) out_row[new_idx+3] = rows[y][orig_idx+3];
         }
         fwrite(out_row, sizeof(unsigned char), row_padded, outputImage);
         free(out_row);
@@ -267,7 +278,9 @@ extern void desenfoque(const char* input_path, const char* name_output, int kern
     
     int width = *(int*)&header[18];
     int height = *(int*)&header[22];
-    int row_padded = (width * 3 + 3) & (~3);
+    short bpp = *(short*)&header[28];
+    int bytes_per_pixel = bpp / 8;
+    int row_padded = (width * bytes_per_pixel + 3) & (~3);
     
     unsigned char** input_rows = (unsigned char**)malloc(height * sizeof(unsigned char*));
     unsigned char** output_rows = (unsigned char**)malloc(height * sizeof(unsigned char*));
@@ -287,19 +300,20 @@ extern void desenfoque(const char* input_path, const char* name_output, int kern
             for (int dx = -k; dx <= k; dx++) {
                 int nx = x + dx;
                 if (nx >= 0 && nx < width) {
-                    int idx = nx * 3;
+                    int idx = nx * bytes_per_pixel;
                     sumB += input_rows[y][idx];
                     sumG += input_rows[y][idx + 1];
                     sumR += input_rows[y][idx + 2];
                     count++;
                 }
             }
-            int index = x * 3;
+            int index = x * bytes_per_pixel;
             temp_rows[y][index] = sumB / count;
             temp_rows[y][index + 1] = sumG / count;
             temp_rows[y][index + 2] = sumR / count;
+            if (bytes_per_pixel == 4) temp_rows[y][index + 3] = input_rows[y][index + 3];
         }
-        for (int p = width * 3; p < row_padded; p++) {
+        for (int p = width * bytes_per_pixel; p < row_padded; p++) {
             temp_rows[y][p] = input_rows[y][p];
         }
     }
@@ -311,19 +325,20 @@ extern void desenfoque(const char* input_path, const char* name_output, int kern
             for (int dy = -k; dy <= k; dy++) {
                 int ny = y + dy;
                 if (ny >= 0 && ny < height) {
-                    int idx = x * 3;
+                    int idx = x * bytes_per_pixel;
                     sumB += temp_rows[ny][idx];
                     sumG += temp_rows[ny][idx + 1];
                     sumR += temp_rows[ny][idx + 2];
                     count++;
                 }
             }
-            int index = x * 3;
+            int index = x * bytes_per_pixel;
             output_rows[y][index] = sumB / count;
             output_rows[y][index + 1] = sumG / count;
             output_rows[y][index + 2] = sumR / count;
+            if (bytes_per_pixel == 4) output_rows[y][index + 3] = temp_rows[y][index + 3];
         }
-        for (int p = width * 3; p < row_padded; p++) {
+        for (int p = width * bytes_per_pixel; p < row_padded; p++) {
             output_rows[y][p] = temp_rows[y][p];
         }
     }
@@ -377,7 +392,9 @@ extern void desenfoque_grey(const char* input_path, const char* name_output, int
     
     int width = *(int*)&header[18];
     int height = *(int*)&header[22];
-    int row_padded = (width * 3 + 3) & (~3);
+    short bpp = *(short*)&header[28];
+    int bytes_per_pixel = bpp / 8;
+    int row_padded = (width * bytes_per_pixel + 3) & (~3);
     
     unsigned char** input_rows = (unsigned char**)malloc(height * sizeof(unsigned char*));
     unsigned char** output_rows = (unsigned char**)malloc(height * sizeof(unsigned char*));
@@ -392,7 +409,7 @@ extern void desenfoque_grey(const char* input_path, const char* name_output, int
     // Primero, convertir todo a escala de grises para el input
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
-            int idx = x * 3;
+            int idx = x * bytes_per_pixel;
             unsigned char b = input_rows[y][idx];
             unsigned char g = input_rows[y][idx+1];
             unsigned char r = input_rows[y][idx+2];
@@ -400,6 +417,7 @@ extern void desenfoque_grey(const char* input_path, const char* name_output, int
             input_rows[y][idx] = pixel;
             input_rows[y][idx+1] = pixel;
             input_rows[y][idx+2] = pixel;
+            if (bytes_per_pixel == 4) input_rows[y][idx+3] = input_rows[y][idx+3];
         }
     }
     
@@ -411,17 +429,18 @@ extern void desenfoque_grey(const char* input_path, const char* name_output, int
             for (int dx = -k; dx <= k; dx++) {
                 int nx = x + dx;
                 if (nx >= 0 && nx < width) {
-                    sum += input_rows[y][nx * 3]; // Gris, canales iguales
+                    sum += input_rows[y][nx * bytes_per_pixel]; // Gris, canales iguales
                     count++;
                 }
             }
-            int index = x * 3;
+            int index = x * bytes_per_pixel;
             unsigned char prom = sum / count;
             temp_rows[y][index] = prom;
             temp_rows[y][index + 1] = prom;
             temp_rows[y][index + 2] = prom;
+            if (bytes_per_pixel == 4) temp_rows[y][index + 3] = input_rows[y][index + 3];
         }
-        for (int p = width * 3; p < row_padded; p++) temp_rows[y][p] = input_rows[y][p];
+        for (int p = width * bytes_per_pixel; p < row_padded; p++) temp_rows[y][p] = input_rows[y][p];
     }
     
     // Desenfoque vertical
@@ -431,17 +450,18 @@ extern void desenfoque_grey(const char* input_path, const char* name_output, int
             for (int dy = -k; dy <= k; dy++) {
                 int ny = y + dy;
                 if (ny >= 0 && ny < height) {
-                    sum += temp_rows[ny][x * 3];
+                    sum += temp_rows[ny][x * bytes_per_pixel];
                     count++;
                 }
             }
-            int index = x * 3;
+            int index = x * bytes_per_pixel;
             unsigned char prom = sum / count;
             output_rows[y][index] = prom;
             output_rows[y][index + 1] = prom;
             output_rows[y][index + 2] = prom;
+            if (bytes_per_pixel == 4) output_rows[y][index + 3] = temp_rows[y][index + 3];
         }
-        for (int p = width * 3; p < row_padded; p++) output_rows[y][p] = temp_rows[y][p];
+        for (int p = width * bytes_per_pixel; p < row_padded; p++) output_rows[y][p] = temp_rows[y][p];
     }
     
     for (int i = 0; i < height; i++) {

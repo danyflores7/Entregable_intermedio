@@ -16,3 +16,12 @@ output_log.txt
 # Ignoramos todos los archivos .bmp para evitar subir archivos pesados.
 # Si deseas subir alguna imagen específica, puedes usar 'git add -f nombre.bmp'
 img/*.bmp
+
+# Python y Entornos Virtuales
+venv/
+__pycache__/
+*.pyc
+
+# Librerías dinámicas
+*.dylib
+*.so

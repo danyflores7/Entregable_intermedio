@@ -25,22 +25,22 @@ int main() {
    */
 
   // 1. Inversión vertical en escala de grises
-  inv_img("inv_1", "./img/prueba2.bmp");
+  inv_img("inv_1", "./img/img2.bmp");
 
   // 2. Inversión vertical a color
-  inv_img_color("inv_color_1", "./img/prueba2.bmp");
+  inv_img_color("inv_color_1", "./img/img2.bmp");
 
   // 3. Inversión horizontal en escala de grises
-  inv_img_grey_horizontal("espejo", "./img/prueba2.bmp");
+  inv_img_grey_horizontal("espejo", "./img/img2.bmp");
 
   // 4. Inversión horizontal a color
-  inv_img_color_horizontal("espejo_color", "./img/prueba2.bmp");
+  inv_img_color_horizontal("espejo_color", "./img/img2.bmp");
 
   // 5. Desenfoque con kernel definido a color
-  desenfoque("./img/prueba2.bmp", "desenfoque", 27);
+  desenfoque("./img/img2.bmp", "desenfoque", 27);
 
   // 6. Desenfoque con kernel definido en escala de grises
-  desenfoque_grey("./img/prueba2.bmp", "desenfoque_gris", 27);
+  desenfoque_grey("./img/img2.bmp", "desenfoque_gris", 27);
 
   printf("Procesamiento terminado.\n");
   return 0;

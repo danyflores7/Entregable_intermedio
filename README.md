@@ -75,3 +75,10 @@ python main.py
 ## 📝 Notas Adicionales
 - Las imágenes originales pesadas o cargadas temporalmente **no** se suben al repositorio.
 - La extensión `.dylib` / `.so` no se rastrea en el control de versiones por diseño. Es necesario compilarla en cada nuevo equipo.
+
+
+## 5. Video explicativo
+
+A continuación se muestra un video explicativo del programa
+
+[![Ver video explicativo](https://img.youtube.com/vi/MU28U0sjdCc/maxresdefault.jpg)](https://www.youtube.com/watch?v=MU28U0sjdCc)

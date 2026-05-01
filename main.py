@@ -106,9 +106,17 @@ class MainWindow(QMainWindow):
         self.setFixedSize(700, 500)
         self.setStyleSheet("background-color: #323232; color: #E0E0E0;")
         
-        # Determine the shared library extension
-        lib_ext = '.dylib' if sys.platform == 'darwin' else '.so'
-        self.lib = ctypes.CDLL(f"./libprocesamiento{lib_ext}")
+        # Determine the shared library extension for the current platform.
+        if sys.platform == "darwin":
+            lib_ext = ".dylib"
+        elif os.name == "nt":
+            lib_ext = ".dll"
+        else:
+            lib_ext = ".so"
+
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        lib_path = os.path.join(base_dir, f"libprocesamiento{lib_ext}")
+        self.lib = ctypes.CDLL(lib_path)
         
         # Setup C signatures
         self.lib.inv_img.argtypes = [ctypes.c_char_p, ctypes.c_char_p]

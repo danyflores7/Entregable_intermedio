@@ -6,7 +6,7 @@
 #include <string.h>
 
 // Función itoa proporcionada en el ejemplo
-extern void itoa(int N, char *str) {
+static void int_to_string(int N, char *str) {
     int i = 0;
     int sign = N;
     if (N < 0) N = -N;

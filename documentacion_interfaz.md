@@ -52,5 +52,9 @@ La aplicación se compone de los siguientes elementos gráficos, cada uno respon
    * **Elemento Gráfico:** Barra superior `QMenuBar` conectada a un diálogo estricto `QDialog`.
    * **Función:** Presenta de manera modal el nombre de los participantes y el banner del ITESM, bloqueando temporalmente interacciones con la UI principal por seguridad hasta ser cerrado.
 
-### [ESPACIO PARA VIDEO DEMOSTRATIVO]
-*< Inserte aquí el enlace local o de YouTube al video demostrativo requerido por la rúbrica >*
+### Video Demostrativo
+A continuación se presenta la evidencia en video que demuestra el funcionamiento de todo el proyecto, la conexión de sus elementos y el procesamiento exitoso de imágenes:
+
+[![Video Demostrativo del Proyecto](https://img.youtube.com/vi/fT0UtmsZl9g/0.jpg)](https://youtu.be/fT0UtmsZl9g)
+
+*(Haz clic en la imagen superior para reproducir el video en YouTube)*
